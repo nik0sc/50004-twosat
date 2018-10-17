@@ -1,0 +1,31 @@
+2SAT: Clauses of 2-CNF
+	(a OR b) AND (c OR d) AND (e OR f) ....
+	* Duplicate clauses of 2CNF have no effect!
+	* Set - Constant time lookup/insert, order not important, space/time tradeoff
+
+Each clause is equivalent to either of (NOT a -> b) or (NOT b -> a) -- substitute each 2CNF clause into both implication equivalents
+
+These implications can be represented as a directed graph. (List or matrix? This represents quite naturally as a list. Let's try that approach)
+
+There should not be a connection between any literal and its inverse, or vice versa! To check this we traverse the entire graph starting at each literal, looking for a path to its inverse. (BFS feels better for this use case.)
+
+Our initial KB can be a Set<EnforcedOrderPair<Int, Int>>
+	No duplicate clauses - no duplicate implications!
+Our digraph can be a Map<Int, List<Int>> 
+	Inner list effectively behaves as a set since there won't be any duplicate edges due to unique implications from above
+
+Or insert directly into digraph Map<Int, Set<Int>>. I don't know
+
+The negation of an int represents the inverse of a literal
+
+Step 1. Read in a formula and, line by line, convert into our KB form - eliminating any duplicates and enforcing a clause order
+
+Step 2. Convert into a digraph
+
+
+Step 1. Read in a formula and, line by line:
+	a. Order each clause in ascending order
+	b. insert into digraph, relying on the int ordering before, combined with checking the other end of the edge, to eliminate duplicates
+
+Step 2. For each vertex in the graph, check if its inverse is reachable from there using a BFS. If it's reachable we know the 2SAT is unsatisfiable
+
