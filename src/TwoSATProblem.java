@@ -29,8 +29,10 @@ public class TwoSATProblem {
             return;
         }
 
+        // (a OR b) is equivalent to either of (NOT a -> b) or (NOT b -> a)
         int[][] implications = {{-a, b}, {-b, a}};
 
+        // Insert each implication into the digraph
         for (int[] impl: implications) {
             if (digraph.containsKey(impl[0])) {
                 digraph.get(impl[0]).add(impl[1]);
