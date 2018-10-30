@@ -14,7 +14,14 @@ public class Main {
             return;
         }
 
-        TwoSATProblem problem = CNFParser.readFrom(scanner);
+        TwoSATProblem problem = null;
+
+        try {
+            problem = CNFParser.readFrom(scanner);
+        } catch (NumberFormatException e) {
+            System.out.println("Malformed cnf file");
+            return;
+        }
 
         if (problem == null) {
             System.out.println("Parse failed");
@@ -27,10 +34,11 @@ public class Main {
         System.out.println("Break here to inspect graph");
 
         System.out.println("Strongly connected components: ");
-        TarjanSccFinder sccFinder = new TarjanSccFinder(digraph);
-        Collection<List<Integer>> sccs = sccFinder.findSccs();
-        System.out.println(sccs.toString());
+        problem.solve();
+        System.out.println(problem.getSccSolution().toString());
         System.out.println("Break here to inspect components");
+
+        System.out.println("FORMULA " + (problem.isSatisfiable() ? "SATISFIABLE" : "UNSATISFIABLE"));
 
 
         scanner.close();
