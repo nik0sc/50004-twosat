@@ -4,11 +4,13 @@ public class TwoSATProblem {
     private Map<Integer, Set<Integer>> digraph;
     private int numLiterals;
     private int numImplications;
+    private Collection<List<Integer>> sccSolution;
 
     TwoSATProblem() {
         digraph = new HashMap<>();
         numLiterals = 0;
         numImplications = 0;
+        sccSolution = null;
     }
 
     public Map<Integer, Set<Integer>> getDigraph() {
@@ -43,12 +45,36 @@ public class TwoSATProblem {
                 digraph.put(impl[0], adjacents);
                 numLiterals++;
             }
+            // Other side of implication must also be in the keys
+            if (!digraph.containsKey(impl[1])) {
+                digraph.put(impl[1], new HashSet<>());
+            }
             numImplications++;
         }
     }
 
+    public void solve() {
+        if (sccSolution == null) {
+            sccSolution = new TarjanSccFinder(digraph).findSccs();
+        }
+    }
+
+    public Collection<List<Integer>> getSccSolution() {
+        return sccSolution;
+    }
+
     public boolean isSatisfiable() {
-        return false;
+        solve();
+
+        for (List<Integer> component: sccSolution) {
+            for (int key: component) {
+                if (component.contains(-key)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public List<Boolean> findSolution() {

@@ -5,6 +5,8 @@ import java.util.*;
 
 
 public class TarjanSccFinder {
+    // The input graph must include in its keys ALL vertices,
+    // including those with outdegree 0 (not leading anywhere)
     private Map<Integer, Set<Integer>> graph;
 
     // Actually, there is a Stack<> type but that is deprecated
@@ -42,6 +44,7 @@ public class TarjanSccFinder {
         nextId = 0;
 
         // Populate vertexToId with sentinels and vertexOnStack with false
+        // vertexToId and vertexOnStack should contain even the (unseen) inverses
         for (int vertex: graph.keySet()) {
             vertexToId.put(vertex, -1);
 //            vertexLowLink.put(vertex, -1);
