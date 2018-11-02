@@ -4,14 +4,13 @@ public class TwoSATProblem {
     private Map<Integer, Set<Integer>> digraph;
     private int numLiterals;
     private int numImplications;
-    private Map<Integer, List<Integer>> sccSolution;
     private TarjanSccFinder tarjan;
 
     TwoSATProblem() {
         digraph = new HashMap<>();
         numLiterals = 0;
         numImplications = 0;
-        sccSolution = null;
+        tarjan = null;
     }
 
     public Map<Integer, Set<Integer>> getDigraph() {
@@ -34,6 +33,9 @@ public class TwoSATProblem {
      * @param b
      */
     public void insertCNFClause(int a, int b) {
+        // Forget TarjanSccFinder!
+        tarjan = null;
+
         if (a == 0 || b == 0) {
             System.err.println("Cannot insert 0 into KB");
             return;
@@ -62,14 +64,14 @@ public class TwoSATProblem {
     }
 
     public void solve() {
-        if (sccSolution == null) {
+        if (tarjan == null) {
             tarjan = new TarjanSccFinder(digraph);
-            sccSolution = tarjan.findSccs();
+            tarjan.findSccs();
         }
     }
 
-    public Collection<List<Integer>> getSccSolution() {
-        return sccSolution.values();
+    public List<Set<Integer>> getSccSolution() {
+        return tarjan.findSccs();
     }
 
     /**
@@ -80,7 +82,7 @@ public class TwoSATProblem {
         solve();
 
         // Search each strongly connected component for a literal and its inverse
-        for (List<Integer> component: getSccSolution()) {
+        for (Set<Integer> component: getSccSolution()) {
             for (int key: component) {
                 if (component.contains(-key)) {
                     return false;
@@ -103,21 +105,18 @@ public class TwoSATProblem {
 
         List<Boolean> assignment = new ArrayList<>();
 
-        // Sccs to skip
-        Set<Integer> skipSccLowlink = new HashSet<>();
-
         // pad my list up to 1 extra for 1-based indexing
         for (int i = 0; i <= numLiterals; i++) {
             assignment.add(null);
         }
 
-        for (Map.Entry<Integer, List<Integer>> scc: tarjan.findSccs().entrySet()) {
+        for (Set<Integer> scc: tarjan.findSccs()) {
             // Skip this scc if already assigned
-            if (assignment.get(Math.abs(scc.getValue().get(0))) != null) {
+            if (assignment.get(Math.abs(scc.iterator().next())) != null) {
                 continue;
             }
 
-            for (int literal: scc.getValue()) {
+            for (int literal: scc) {
                 if (literal < 0) {
                     assignment.set(-literal, false);
                 } else if (literal > 0) {
@@ -127,31 +126,6 @@ public class TwoSATProblem {
                 }
             }
         }
-
-//        // Iterates in reverse topological order
-//        for (Map.Entry<Integer, Integer> entry: tarjan.getVertexLowLink().entrySet()) {
-//            // Skip this scc if already assigned
-//            if (skipSccLowlink.contains(entry.getValue())) {
-//                continue;
-//            }
-//
-//            int literal = entry.getKey();
-//
-//            // If this literal is already assigned, skip the entire scc
-//            if (assignment.get(Math.abs(literal)) != null) {
-//                skipSccLowlink.add(entry.getValue());
-//                continue;
-//            }
-//
-//            if (literal < 0) {
-//                assignment.set(-literal, false);
-//            } else if (literal > 0) {
-//                assignment.set(literal, true);
-//            } else {
-//                System.err.println("Literal 0?");
-//            }
-//
-//        }
 
         assignment.remove(0);
 
