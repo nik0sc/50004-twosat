@@ -33,8 +33,6 @@ public class TarjanSccFinder {
     This eventually contains the information about which components are
     strongly connected.
     Strongly connected component vertices all have the same low-link value
-    Tarjan's algorithm outputs vertices in reverse topological order.
-    So this Map remembers the insertion order of vertices.
     */
     private Map<Integer, Integer> vertexLowLink;
 
@@ -64,7 +62,7 @@ public class TarjanSccFinder {
         stack = new ArrayDeque<>();
         vertexToId = new HashMap<>();
         vertexOnStack = new HashMap<>();
-        vertexLowLink = new LinkedHashMap<>();
+        vertexLowLink = new HashMap<>();
         sccPopOrder = new ArrayList<>();
         nextId = 0;
 

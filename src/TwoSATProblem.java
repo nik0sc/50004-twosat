@@ -82,7 +82,7 @@ public class TwoSATProblem {
         solve();
 
         // Search each strongly connected component for a literal and its inverse
-        for (Set<Integer> component: getSccSolution()) {
+        for (Set<Integer> component: tarjan.findSccs()) {
             for (int key: component) {
                 if (component.contains(-key)) {
                     return false;
