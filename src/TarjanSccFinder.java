@@ -104,7 +104,6 @@ public class TarjanSccFinder {
         vertexLowLink.put(vertex, nextId);
         nextId++;
 
-
         // For each vertex "to" directly adjacent to the current vertex...
         for (int to: graph.get(vertex)) {
             // Recursively explore unseen vertices
@@ -134,11 +133,7 @@ public class TarjanSccFinder {
                 int stackHeadVertex = stack.pop();
                 currentScc.add(stackHeadVertex);
                 vertexOnStack.put(stackHeadVertex, false);
-                // Why is this here???
-                if (!vertexLowLink.get(stackHeadVertex).equals(vertexToId.get(vertex))) {
-                    System.out.println("Actually assigned lowlink value on the way out from scc");
-                    vertexLowLink.put(stackHeadVertex, vertexToId.get(vertex));
-                }
+
                 if (stackHeadVertex == vertex) {
                     break; // out of "while (stack.peek() != null)"
                 }
