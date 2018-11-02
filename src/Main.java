@@ -33,16 +33,6 @@ public class Main {
             return;
         }
 
-        Map<Integer, Set<Integer>> digraph = problem.getDigraph();
-
-        System.out.println(digraph.toString());
-        System.out.println("Break here to inspect graph");
-
-        System.out.println("Strongly connected components: ");
-        problem.solve();
-        System.out.println(problem.getSccSolution().toString());
-        System.out.println("Break here to inspect components");
-
         boolean isSat = problem.isSatisfiable();
         System.out.println("FORMULA " + (isSat ? "" : "UN") + "SATISFIABLE");
 

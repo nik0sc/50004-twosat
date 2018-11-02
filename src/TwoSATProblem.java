@@ -105,7 +105,7 @@ public class TwoSATProblem {
 
         List<Boolean> assignment = new ArrayList<>();
 
-        // pad my list up to 1 extra for 1-based indexing
+        // pad list up to 1 extra for 1-based indexing
         for (int i = 0; i <= numLiterals; i++) {
             assignment.add(null);
         }
@@ -116,6 +116,9 @@ public class TwoSATProblem {
                 continue;
             }
 
+            // We simply assign everything to be true inside this SCC.
+            // If there is a false literal in the SCC, then since it can reach every other
+            // vertex, if just one of them is true, we have F->T which is not valid.
             for (int literal: scc) {
                 if (literal < 0) {
                     assignment.set(-literal, false);
@@ -127,8 +130,8 @@ public class TwoSATProblem {
             }
         }
 
+        // remove the extra slot at index 0
         assignment.remove(0);
-
         return assignment;
     }
 }

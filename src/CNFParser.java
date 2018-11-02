@@ -70,8 +70,8 @@ public class CNFParser {
         }
 
         // check the graph
-        System.out.println("Number of variables in preamble: " + variables + " vs seen: " + problem.getNumLiterals());
-        System.out.println("Number of clauses in preamble: " + clauses + " vs seen: " + problem.getNumImplications() / 2);
+//        System.out.println("Number of variables in preamble: " + variables + " vs seen: " + problem.getNumLiterals());
+//        System.out.println("Number of clauses in preamble: " + clauses + " vs seen: " + problem.getNumImplications() / 2);
 
         return problem;
     }

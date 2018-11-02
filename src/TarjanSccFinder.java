@@ -128,7 +128,7 @@ public class TarjanSccFinder {
             sccPopOrder.add(currentScc);
 
             // This is the root node for this branch
-            // Start popping off the vertex stack and marking each one with the same low-link value
+            // Start popping off the vertex stack
             while (stack.peek() != null) {
                 int stackHeadVertex = stack.pop();
                 currentScc.add(stackHeadVertex);
@@ -139,7 +139,12 @@ public class TarjanSccFinder {
                 }
             }
         }
-        // When execution reaches here, we've exhausted the reachable vertices from this one.
-        // Go back up the call stack and look at the previously visited vertex.
+       /*
+       When execution reaches here, we've exhausted the reachable vertices from this one.
+       Go back up the call stack and look at the previously visited vertex.
+       If we just popped the previous vertex off the stack, we won't update its low-link value
+       nor will its id be the same as its low-link value because we already changed it,
+       so the block above won't run.
+       */
     }
 }
