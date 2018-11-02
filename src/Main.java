@@ -43,8 +43,12 @@ public class Main {
         System.out.println(problem.getSccSolution().toString());
         System.out.println("Break here to inspect components");
 
-        System.out.println("FORMULA " + (problem.isSatisfiable() ? "" : "UN") + "SATISFIABLE");
+        boolean isSat = problem.isSatisfiable();
+        System.out.println("FORMULA " + (isSat ? "" : "UN") + "SATISFIABLE");
 
+        if (isSat) {
+            problem.findSolution().forEach((x) -> System.out.print(x ? "1 " : "0 "));
+        }
 
         scanner.close();
     }
